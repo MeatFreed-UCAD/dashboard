@@ -1,7 +1,29 @@
-import { useState, useEffect } from 'react';
-import { getDataModel } from './DataModel';
+import "./styles/App.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./Login";
+import Register from "./Register";
+import Reset from "./Reset";
+import Dashboard from "./Dashboard";
 
 function App() {
+  return (
+    <div className="app">
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<Login/>} />
+          <Route exact path="/register" element={<Register/>} />
+          <Route exact path="/reset" element={<Reset/>} />
+          <Route exact path="/dashboard" element={<Dashboard/>} />
+        </Routes>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+/* function App() {
   const dataModel = getDataModel();
   const [restaurants, setRestaurants] = useState([]);
   useEffect(()=>{ 
@@ -20,6 +42,4 @@ function App() {
       </ul>
     </div>
   );
-}
-
-export default App;
+} */
