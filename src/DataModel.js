@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { 
   getFirestore, doc, getDoc, setDoc, updateDoc,
-  collection, getDocs
+  collection, getDocs, query, where
 } from "firebase/firestore";
 import firebaseConfig from './Secrets';
 
@@ -55,8 +55,13 @@ class DataModel extends Model {
   constructor() {
     super();
     this.restaurants = [];
+    this.offers = [];
+    this.place_id = "ChIJ4Wg_RV47a0gRZr0qr5rB60k";
+    this.name = "";
+    this.fetchRestaurantName();
+    this.fetchOfferData();
   }
-
+  
   async fetchData() {
     const querySnapshot = await getDocs(collection(db, "restaurants"));
     let newList = [];
@@ -66,6 +71,36 @@ class DataModel extends Model {
       newList.push(restaurant);
     });
     this.restaurants = newList;
+    this.notifyListener();
+  }
+
+  async fetchRestaurantName() {
+    const q = query(collection(db, "restaurants"), where("place_id", "==", this.place_id));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const data = querySnapshot.docs[0].data();
+      // console.log(data);
+      this.name = data.name;
+      this.notifyListener()
+    }
+    else {
+      // not found
+    }
+  }
+
+  getRestaurantName() {
+    return this.name;
+  }
+
+  async fetchOfferData() {
+    const q = query(collection(db, "offers"), where("place_id", "==", this.place_id));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      let offer = doc.data();
+      offer.key = doc.id;
+      this.offers.push(offer);
+    });
+    // console.log(this.offers);
     this.notifyListener();
   }
 }
