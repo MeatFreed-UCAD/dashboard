@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/meatfreed-dashboard/static/css/main.b4eebf10.css",
-    "main.js": "/meatfreed-dashboard/static/js/main.1d06c6bb.js",
-    "static/js/787.e2d6554a.chunk.js": "/meatfreed-dashboard/static/js/787.e2d6554a.chunk.js",
-    "static/media/meatfreed-logo.png": "/meatfreed-dashboard/static/media/meatfreed-logo.b52d5e68abb27b24b448.png",
-    "index.html": "/meatfreed-dashboard/index.html",
-    "main.b4eebf10.css.map": "/meatfreed-dashboard/static/css/main.b4eebf10.css.map",
-    "main.1d06c6bb.js.map": "/meatfreed-dashboard/static/js/main.1d06c6bb.js.map",
-    "787.e2d6554a.chunk.js.map": "/meatfreed-dashboard/static/js/787.e2d6554a.chunk.js.map"
+    "main.css": "/dashboard/static/css/main.b4eebf10.css",
+    "main.js": "/dashboard/static/js/main.fef9a255.js",
+    "static/js/787.e2d6554a.chunk.js": "/dashboard/static/js/787.e2d6554a.chunk.js",
+    "static/media/meatfreed-logo.png": "/dashboard/static/media/meatfreed-logo.b52d5e68abb27b24b448.png",
+    "index.html": "/dashboard/index.html",
+    "main.b4eebf10.css.map": "/dashboard/static/css/main.b4eebf10.css.map",
+    "main.fef9a255.js.map": "/dashboard/static/js/main.fef9a255.js.map",
+    "787.e2d6554a.chunk.js.map": "/dashboard/static/js/787.e2d6554a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b4eebf10.css",
-    "static/js/main.1d06c6bb.js"
+    "static/js/main.fef9a255.js"
   ]
 }
