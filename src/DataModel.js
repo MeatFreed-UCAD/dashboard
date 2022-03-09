@@ -58,7 +58,10 @@ class DataModel extends Model {
     this.offers = [];
     this.place_id = "ChIJ4Wg_RV47a0gRZr0qr5rB60k";
     this.name = "";
-    this.fetchRestaurantName();
+    this.numClicks = "";
+    this.numOffers = "";
+    this.uniqueUsers = "";
+    this.fetchRestaurantInfo();
     this.fetchOfferData();
   }
   
@@ -74,13 +77,14 @@ class DataModel extends Model {
     this.notifyListener();
   }
 
-  async fetchRestaurantName() {
+  async fetchRestaurantInfo() {
     const q = query(collection(db, "restaurants"), where("place_id", "==", this.place_id));
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
       const data = querySnapshot.docs[0].data();
       // console.log(data);
       this.name = data.name;
+      this.numClicks = data.clicksCount;
       this.notifyListener()
     }
     else {
@@ -92,14 +96,24 @@ class DataModel extends Model {
     return this.name;
   }
 
+  getRestaurantClicks() {
+    return this.numClicks;
+  }
+
+  getNumOffers() {
+    return this.numOffers;
+  }
+
   async fetchOfferData() {
     const q = query(collection(db, "offers"), where("place_id", "==", this.place_id));
+    // const q = query(collection(db, "offers"));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       let offer = doc.data();
       offer.key = doc.id;
       this.offers.push(offer);
     });
+    this.numOffers = querySnapshot.size;
     // console.log(this.offers);
     this.notifyListener();
   }

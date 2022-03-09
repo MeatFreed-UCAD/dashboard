@@ -14,7 +14,9 @@ function Dashboard() {
   const navigate = useNavigate();
   const dataModel = getDataModel();
   const [offers, setOffers] = useState([]);
-  const [restaurantName, setRestaurantName] = useState([]);
+  const [restaurantName, setRestaurantName] = useState("");
+  const [restaurantClicks, setRestaurantClicks] = useState("");
+  const [numOffers, setNumOffers] = useState("");
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
@@ -24,6 +26,8 @@ function Dashboard() {
     });
     const dataModelListenerId = dataModel.addListener(() => {
       setRestaurantName(dataModel.getRestaurantName());
+      setRestaurantClicks(dataModel.getRestaurantClicks());
+      setNumOffers(dataModel.getNumOffers());
       let newOffers = Array.from(dataModel.offers);
       setOffers(newOffers);
     });
@@ -34,21 +38,11 @@ function Dashboard() {
   }, [user, loading]);
   return (
     <>
-    {/* <div className="main">
-       <div className="inputContainer">
-        Logged in as
-         <div>{name}</div>
-         <div>{user?.email}</div>
-         <button type="button" className="btn btn-primary" onClick={userModel.logout}>
-          Logout
-         </button>
-       </div>
-    </div> */}
     <div className="nav">
       <img src={logo} alt="Logo" className="logo"/>
       <ul className="nav-items">
-        <li>OFFERS</li>
-        <li>CAMPAIGNS</li>
+        {/* <li>OFFERS</li> */}
+        {/* <li>CAMPAIGNS</li> */}
         <li>
           <button type="button" className="btn btn-light" onClick={userModel.logout}>
             Logout
@@ -60,30 +54,32 @@ function Dashboard() {
       <h1>{restaurantName}</h1>
       <ul className="stats-items">
         <li>
-          <span className="stats-number">99,999k</span>
+          <span className="stats-number">{numOffers}</span>
           <span className="stats-text">OFFERS ACTIVE</span>
         </li>
         <li>
-          <span className="stats-number">99,999k</span>
+          <span className="stats-number">0</span>
           <span className="stats-text">OFFERS EXPIRED</span>
         </li>
         <li>
-          <span className="stats-number">99,999k</span>
-          <span className="stats-text">MAP VIEW</span>
+          <span className="stats-number">{restaurantClicks}</span>
+          <span className="stats-text">TOTAL CLICKS</span>
         </li>
-        <li>
+        {/* <li>
           <span className="stats-number">99,999k</span>
           <span className="stats-text">UNIQUE USERS</span>
-        </li>
+        </li> */}
       </ul>
       
-      <ul className="offer-items">
-          <li>Description</li>
-          <li>Valid</li>
-          <li>Expiration Date</li>
-          <li>Total Clicks</li>
-      </ul>
-      {offers.map((offer, i) => <Offer key={i} description={offer.description} valid={offer.when} expDate="February 11, 2022" numClicks={offer.clicksCount}/>)}
+      <table>
+        <tr className="table-header">
+          <th>Offer Description</th>
+          <th>Expiration Date</th>
+          <th>Offer Clicks</th>
+        </tr>
+
+        {offers.map((offer, i) => <Offer key={i} description={offer.description} expDate={offer.when} numClicks={offer.clicksCount}/>)}
+      </table>
     </div>
 
      </>

@@ -7,6 +7,7 @@ import Reset from "./Reset";
 import Dashboard from "./Dashboard";
 
 function App() {
+  document.title = 'MeatFreed Dashboard'
   return (
     <div className="app">
       <Router>
