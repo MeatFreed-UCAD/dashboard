@@ -19,6 +19,8 @@ function Login() {
   return (
     <div className="main">
       <div className="inputContainer">
+        <img src="./meatfreed-logo.png" className="login-logo" alt="meatfreed-login-logo"></img>
+        <h5> WELCOME TO YOUR MEATFREED DASHBOARD</h5>
         <input
           type="text"
           className="inputBox"
