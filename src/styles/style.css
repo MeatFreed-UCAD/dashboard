@@ -1,3 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap');
+
+* {
+  /* MeatFreed Color Palette */
+  --meatfreed-blue: #41566bff;
+  --meatfreed-yellow: #fddc93ff;
+  --meatfreed-light-grey: #cddedfff;
+  --meatfreed-green: #82ac68ff;
+  --meatfreed-red: #780000ff;
+  --meatfreed-purple: #a28193ff;
+  --meatfreed-orange: #dc9940ff;
+
+  --meatfreed-green-dark: rgb(58, 92, 37);
+
+}
+
+body {
+  font-family: "Libre Franklin", sans-serif;
+}
 .main {
   height: 100vh;
   width: 100vw;
@@ -15,19 +34,52 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  background-color: #dcdcdc;
-  padding: 30px;
+  background-color: var(--meatfreed-light-grey);
+  padding: 60px;
+  border-radius: 10px;
 }
 
 .inputBox {
-  padding: 10px;
+  padding: 10px 50px;
   margin-bottom: 10px;
   font-size: 16px;
+  border: none;
+  border-radius: 10px;
+}
+
+.btn-primary {
+  background-color: var(--meatfreed-green);
+  border: none;
+  padding: 10px;
+  margin: 10px 0px;
+}
+
+.btn-primary:hover {
+  background-color: var(--meatfreed-green-dark);
+}
+
+.btn-dark {
+  background-color: var(--meatfreed-blue);
+  border: none;
+  padding: 10px;
+  margin: 10px 0px;
+}
+
+.login-logo {
+  width: 200px;
+  padding: 30px;
+  align-self: center;
+}
+
+.inputContainer h5 {
+  font-weight: 500;
+  font-size: large;
+  margin-bottom: 50px;
 }
 
 .nav-items {
   list-style-type: none;
-  background-color: #3d3d3d;
+  background-color: var(--meatfreed-blue);
   color: white;
   padding: 0 80px;
   display: flex;
@@ -37,32 +89,36 @@
   justify-content: flex-end;
   align-items: center;
 }
-.content{
+
+.content {
   margin: 0 120px;
 }
 
 h1 {
-  color: rgb(83, 83, 83);
+  color: var(--meatfreed-blue);
+  font-family: "Libre Baskerville", serif;
+  font-weight: 700;
   font-size: 40px;
+
 }
 
-table{
+table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 20px;
 }
 
-th, td{
+th, td {
   text-align: center;
 }
 
-.table-header{
+.table-header {
   font-size: 20px;
   color: grey;
   font-weight: bold;
 }
 
-tr{
+tr {
   border-radius: 20px;
 }
 
@@ -72,12 +128,12 @@ td:first-child {
   border-bottom-left-radius: 20px;
 }
 
-td:last-child{
+td:last-child {
   border-bottom-right-radius: 20px;
   border-top-right-radius: 20px;
 }
 
-.table-body{
+.table-body {
   background-color: rgb(255, 255, 255);
   height: 60px;
   box-shadow: 0 0 0.8em rgba(177, 165, 165, 0.555);
