@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, getUserModel } from './DataModel';
 import { useAuthState } from "react-firebase-hooks/auth";
+import logo from './meatfreed-logo.png';
 import './styles/style.css';
 
 function Login() {
@@ -19,7 +20,7 @@ function Login() {
   return (
     <div className="main">
       <div className="inputContainer">
-        <img src="./meatfreed-logo.png" className="login-logo" alt="meatfreed-login-logo"></img>
+        <img src={logo} className="login-logo" alt="meatfreed-login-logo"></img>
         <h5> WELCOME TO YOUR MEATFREED DASHBOARD</h5>
         <input
           type="text"
