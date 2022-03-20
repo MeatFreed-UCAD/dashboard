@@ -9,13 +9,13 @@ import {
   signOut,
 } from "firebase/auth";
 import { 
-  getFirestore, doc, getDoc, setDoc, updateDoc,
+  getFirestore, doc, getDoc, setDoc, 
   collection, getDocs, query, where
 } from "firebase/firestore";
 import firebaseConfig from './Secrets';
 
 let app;
-if (getApps().length == 0){
+if (getApps().length === 0){
   app = initializeApp(firebaseConfig);
 }
 const auth = getAuth(app);
@@ -56,39 +56,82 @@ class DataModel extends Model {
     super();
     this.restaurants = [];
     this.offers = [];
-    this.place_id = "ChIJ4Wg_RV47a0gRZr0qr5rB60k";
     this.name = "";
     this.numClicks = "";
     this.numOffers = "";
-    this.uniqueUsers = "";
-    this.fetchRestaurantInfo();
-    this.fetchOfferData();
-  }
-  
-  async fetchData() {
-    const querySnapshot = await getDocs(collection(db, "restaurants"));
-    let newList = [];
-    querySnapshot.forEach((doc) => {
-      let restaurant = doc.data();
-      restaurant.key = doc.id;
-      newList.push(restaurant);
-    });
-    this.restaurants = newList;
-    this.notifyListener();
+    this.place_id = "";
   }
 
-  async fetchRestaurantInfo() {
-    const q = query(collection(db, "restaurants"), where("place_id", "==", this.place_id));
+  async fetchUserEmail(user) {
+    const docSnap = await getDoc(doc(db, "users", user?.uid));
+    if (docSnap.exists()){
+      return docSnap.data().email;
+    }
+  }
+
+  async fetchPlaceId(user) {
+    if (this.place_id) {
+      return this.place_id;
+    }
+    const email = await this.fetchUserEmail(user);
+    const q = query(collection(db, "email2restaurant"), where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty){
+      this.place_id = querySnapshot.docs[0].data().place_id
+      return this.place_id;
+    }
+  }
+
+  async fetchOfferData(user) {
+    const place_id = await this.fetchPlaceId(user);
+    if (place_id === undefined) {
+      return;
+    }
+    const q = query(collection(db, "offers"), where("place_id", "==", place_id));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty){
+      querySnapshot.forEach((doc) => {
+        let offer = doc.data();
+        offer.key = doc.id;
+        this.offers.push(offer);
+      });
+      this.numOffers = querySnapshot.size;
+      // console.log(this.offers);
+      this.notifyListener();
+    }
+  }
+  
+  async fetchRestaurantInfo(user) {
+    const place_id = await this.fetchPlaceId(user);
+    if (place_id === undefined) {
+      this.name = "unauthorized email"; 
+      this.notifyListener();
+      return;
+    }
+    const q = query(collection(db, "restaurants"), where("place_id", "==", place_id));
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
       const data = querySnapshot.docs[0].data();
       // console.log(data);
       this.name = data.name;
       this.numClicks = data.clicksCount;
-      this.notifyListener()
+      this.notifyListener();
     }
-    else {
-      // not found
+  }
+
+  async fetchRestaurantClicks(user) {
+    const place_id = await this.fetchPlaceId(user);
+    if (place_id === undefined) {
+      return;
+    }
+    const q = query(collection(db, "restaurants"), where("place_id", "==", place_id));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const docID = querySnapshot.docs[0].id;
+      const docsSnap = await getDocs(collection(db, "restaurants/" + docID + "/clicks"));
+      docsSnap.forEach((doc) => {
+        // console.log(new Date(doc.data().time * 1000));
+      })
     }
   }
 
@@ -104,19 +147,32 @@ class DataModel extends Model {
     return this.numOffers;
   }
 
-  async fetchOfferData() {
-    const q = query(collection(db, "offers"), where("place_id", "==", this.place_id));
-    // const q = query(collection(db, "offers"));
-    const querySnapshot = await getDocs(q);
+  async fetchData() {
+    const querySnapshot = await getDocs(collection(db, "restaurants"));
+    let newList = [];
     querySnapshot.forEach((doc) => {
-      let offer = doc.data();
-      offer.key = doc.id;
-      this.offers.push(offer);
+      let restaurant = doc.data();
+      restaurant.key = doc.id;
+      newList.push(restaurant);
     });
-    this.numOffers = querySnapshot.size;
-    // console.log(this.offers);
+    this.restaurants = newList;
     this.notifyListener();
   }
+
+  deconstructor() {
+    this.restaurants = [];
+    this.offers = [];
+    this.name = "";
+    this.numClicks = "";
+    this.numOffers = "";
+    this.place_id = "";
+  }
+
+  logout() {
+    signOut(auth);
+    this.deconstructor();
+  };
+
 }
 
 class UserModel extends Model {

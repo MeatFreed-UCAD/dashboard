@@ -20,7 +20,10 @@ function Dashboard() {
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
-    userModel.fetchUserName(user);
+    // userModel.fetchUserName(user);
+    dataModel.fetchRestaurantInfo(user);
+    dataModel.fetchOfferData(user);
+    dataModel.fetchRestaurantClicks(user);
     const listenerId = userModel.addListener(() => {
       setName(userModel.userName);
     });
@@ -44,12 +47,13 @@ function Dashboard() {
         {/* <li>OFFERS</li> */}
         {/* <li>CAMPAIGNS</li> */}
         <li>
-          <button type="button" className="btn btn-light" onClick={userModel.logout}>
+          <button type="button" className="btn btn-light" onClick={dataModel.logout}>
             Logout
           </button>
         </li>
       </ul>
     </div>
+
     <div className="content">
       <h1>{restaurantName}</h1>
       <ul className="stats-items">
@@ -72,13 +76,16 @@ function Dashboard() {
       </ul>
       
       <table>
-        <tr className="table-header">
-          <th>Offer Description</th>
-          <th>Expiration Date</th>
-          <th>Offer Clicks</th>
-        </tr>
-
-        {offers.map((offer, i) => <Offer key={i} description={offer.description} expDate={offer.when} numClicks={offer.clicksCount}/>)}
+        <thead>
+          <tr className="table-header">
+            <th>Offer Description</th>
+            <th>Expiration Date</th>
+            <th>Offer Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {offers.map((offer, i) => <Offer key={i} description={offer.description} expDate={offer.when} numClicks={offer.clicksCount}/>)}
+        </tbody>
       </table>
     </div>
 
