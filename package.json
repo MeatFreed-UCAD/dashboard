@@ -1,7 +1,7 @@
 {
   "name": "meatfreed-web",
   "version": "0.1.0",
-  "homepage": "/dashboard",
+  "homepage": "https://aws.dx91h2a0arku9.amplifyapp.com/dashboard",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.2",
