@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/dashboard/static/css/main.ce685399.css",
-    "main.js": "/dashboard/static/js/main.189c8ec7.js",
+    "main.css": "/dashboard/static/css/main.b2cd9b0d.css",
+    "main.js": "/dashboard/static/js/main.5451e2b1.js",
     "static/js/787.e2d6554a.chunk.js": "/dashboard/static/js/787.e2d6554a.chunk.js",
     "static/media/meatfreed-logo.png": "/dashboard/static/media/meatfreed-logo.b52d5e68abb27b24b448.png",
     "index.html": "/dashboard/index.html",
-    "main.ce685399.css.map": "/dashboard/static/css/main.ce685399.css.map",
-    "main.189c8ec7.js.map": "/dashboard/static/js/main.189c8ec7.js.map",
+    "main.b2cd9b0d.css.map": "/dashboard/static/css/main.b2cd9b0d.css.map",
+    "main.5451e2b1.js.map": "/dashboard/static/js/main.5451e2b1.js.map",
     "787.e2d6554a.chunk.js.map": "/dashboard/static/js/787.e2d6554a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ce685399.css",
-    "static/js/main.189c8ec7.js"
+    "static/css/main.b2cd9b0d.css",
+    "static/js/main.5451e2b1.js"
   ]
 }
