@@ -376,6 +376,14 @@ class AdminModel extends Model {
     this.notifyListener();
   }
 
+  updateItem = async (key, newItem) => {
+    const docRef = doc(db, "users", key);
+    await updateDoc(docRef, newItem);
+    let idx = this.users.findIndex((elem)=>elem.key===key);
+    this.users[idx] = newItem;
+    this.notifyListener();
+  }
+
   deleteItem = async (key) => {
     const docRef = doc(db, "user", key);
     await deleteDoc(docRef);

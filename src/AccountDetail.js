@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getUserModel } from "./DataModel";
+import { getUserModel, getAdminModel } from "./DataModel";
 import './styles/style.css';
 
 function AccountDetail() {
@@ -8,6 +8,7 @@ function AccountDetail() {
   const item = location.state ? location.state.item : null;
   const editMode = (item != null);
   const userModel = getUserModel();
+  const adminModel = getAdminModel();
   const [email, setEmail] = useState(item ? item.email : '');
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState(item ? item.name.split(' ')[0] : '');
@@ -57,8 +58,16 @@ function AccountDetail() {
         <button type="button" className="btn btn-primary" onClick={() => {
             if (!firstName) alert("Please enter the user's first name");
             if (!lastName) alert("Please enter the user's last name");
-            userModel.registerWithEmailAndPassword(`${firstName} ${lastName}`, email, password);
-            navigate('account');
+            if(editMode)
+              adminModel.updateItem(item.key, {
+                uid: item.key,
+                name: firstName + ' ' + lastName,
+                email: email,
+                referralsCount: item.referralsCount
+              });
+            else
+              userModel.registerWithEmailAndPassword(`${firstName} ${lastName}`, email, password);
+            navigate('/account');
           }
         }>
          {editMode ? "Save" : "Add User"}
