@@ -9,9 +9,7 @@
   --meatfreed-red: #780000ff;
   --meatfreed-purple: #a28193ff;
   --meatfreed-orange: #dc9940ff;
-
   --meatfreed-green-dark: rgb(58, 92, 37);
-
 }
 
 body {
@@ -37,6 +35,24 @@ body {
   background-color: var(--meatfreed-light-grey);
   padding: 60px;
   border-radius: 10px;
+}
+
+.inputWithLabel {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  column-gap: 5%;
+}
+
+.inputWithLabel label {
+  text-align: right;
+}
+
+.alignLeft {
+  text-align: left;
+}
+
+.marginBottom {
+  margin-bottom: 5%;
 }
 
 .inputBox {
@@ -92,6 +108,17 @@ body {
 
 .content {
   margin: 0 120px;
+}
+
+.menu-item-btn {
+  color: white;
+}
+
+.chart-container {
+  margin-bottom: 10px;
+  padding: 50px;
+  box-shadow: 0 0 0.8em rgba(177, 165, 165, 0.555);
+  border-radius: 12px;
 }
 
 h1 {

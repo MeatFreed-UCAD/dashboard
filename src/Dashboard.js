@@ -17,80 +17,96 @@ function Dashboard() {
   const [restaurantName, setRestaurantName] = useState("");
   const [restaurantClicks, setRestaurantClicks] = useState("");
   const [numOffers, setNumOffers] = useState("");
+
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
-    // userModel.fetchUserName(user);
     dataModel.fetchRestaurantInfo(user);
     dataModel.fetchOfferData(user);
     dataModel.fetchRestaurantClicks(user);
+    dataModel.fetchOfferClicks(user);
     const listenerId = userModel.addListener(() => {
       setName(userModel.userName);
     });
     const dataModelListenerId = dataModel.addListener(() => {
-      setRestaurantName(dataModel.getRestaurantName());
-      setRestaurantClicks(dataModel.getRestaurantClicks());
-      setNumOffers(dataModel.getNumOffers());
+      setRestaurantName(dataModel.name);
+      setRestaurantClicks(dataModel.numClicks);
+      setNumOffers(dataModel.numOffers);
       let newOffers = Array.from(dataModel.offers);
       setOffers(newOffers);
     });
-    return(() => {
+    return (() => {
       userModel.removeListener(listenerId);
       dataModel.removeListener(dataModelListenerId);
     });
   }, [user, loading]);
   return (
     <>
-    <div className="nav">
-      <img src={logo} alt="Logo" className="logo"/>
-      <ul className="nav-items">
-        {/* <li>OFFERS</li> */}
-        {/* <li>CAMPAIGNS</li> */}
-        <li>
-          <button type="button" className="btn btn-light" onClick={dataModel.logout}>
-            Logout
-          </button>
-        </li>
-      </ul>
-    </div>
+      <div className="nav">
+        <img src={logo} alt="Logo" className="logo" />
+        <ul className="nav-items">
+          <li>
+            <button
+              className="btn menu-item-btn"
+              onClick={() => navigate("/dashboard")}
+            >
+              HOME
+            </button>
+          </li>
+          <li>
+            <button
+              className="btn menu-item-btn"
+              onClick={() => navigate("/dashboardCharts")}
+            >
+              OFFERS
+            </button>
+          </li>
+          {/* <li>CAMPAIGNS</li> */}
+          <li>
+            <button type="button" className="btn btn-light" onClick={dataModel.logout}>
+              Logout
+            </button>
+          </li>
+        </ul>
+      </div>
 
-    <div className="content">
-      <h1>{restaurantName}</h1>
-      <ul className="stats-items">
-        <li>
-          <span className="stats-number">{numOffers}</span>
-          <span className="stats-text">OFFERS ACTIVE</span>
-        </li>
-        <li>
-          <span className="stats-number">0</span>
-          <span className="stats-text">OFFERS EXPIRED</span>
-        </li>
-        <li>
-          <span className="stats-number">{restaurantClicks}</span>
-          <span className="stats-text">TOTAL CLICKS</span>
-        </li>
-        {/* <li>
+      <div className="content">
+        <h1>{restaurantName}</h1>
+        <ul className="stats-items">
+          <li>
+            <span className="stats-number">{numOffers}</span>
+            <span className="stats-text">OFFERS ACTIVE</span>
+          </li>
+          <li>
+            <span className="stats-number">0</span>
+            <span className="stats-text">OFFERS EXPIRED</span>
+          </li>
+          <li>
+            <span className="stats-number">{restaurantClicks}</span>
+            <span className="stats-text">TOTAL CLICKS</span>
+          </li>
+          {/* <li>
           <span className="stats-number">99,999k</span>
           <span className="stats-text">UNIQUE USERS</span>
         </li> */}
-      </ul>
-      
-      <table>
-        <thead>
-          <tr className="table-header">
-            <th>Offer Description</th>
-            <th>Expiration Date</th>
-            <th>Offer Clicks</th>
-          </tr>
-        </thead>
-        <tbody>
-          {offers.map((offer, i) => <Offer key={i} description={offer.description} expDate={offer.when} numClicks={offer.clicksCount}/>)}
-        </tbody>
-      </table>
-    </div>
+        </ul>
 
-     </>
+        <table>
+          <thead>
+            <tr className="table-header">
+              <th>Offer Description</th>
+              <th>Expiration Date</th>
+              <th>Offer Clicks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {offers.map((offer, i) => <Offer key={i} description={offer.description} expDate={offer.when} numClicks={offer.clicksCount} />)}
+          </tbody>
+        </table>
+      </div>
+
+    </>
   );
-  
+
 }
 export default Dashboard;
