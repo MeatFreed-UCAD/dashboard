@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { Link, useNavigate } from "react-router-dom";
-import { auth, getUserModel } from "./DataModel";
+import React, { useState } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
+import { getUserModel } from "./DataModel";
 import './styles/style.css';
 
-function Register() {
+function AccountDetail() {
+  const location = useLocation();
+  const item = location.state ? location.state.item : null;
+  const editMode = (item != null);
   const userModel = getUserModel();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(item ? item.email : '');
   const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+  const [firstName, setFirstName] = useState(item ? item.name.split(' ')[0] : '');
+  const [lastName, setLastName] = useState(item ? item.name.split(' ')[1] : '');
   const navigate = useNavigate();
-  useEffect(() => {
-    if (loading) return;
-    if (user) navigate("/dashboard");
-  }, [user, loading]);
+
   return (
     <div className="main">
       <div className="inputContainer">
@@ -40,32 +38,33 @@ function Register() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="E-mail Address"
         />
+        {
+          item?' ':
         <input
           type="password"
           className="inputBox"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-        />
+        />}
+          <button
+            className="btn btn-dark"
+            type="button"
+            onClick={() => {navigate(-1);}}
+          >
+            Cancel
+          </button>
         <button type="button" className="btn btn-primary" onClick={() => {
-            if (!firstName) alert("Please enter your first name");
-            if (!lastName) alert("Please enter your last name");
+            if (!firstName) alert("Please enter the user's first name");
+            if (!lastName) alert("Please enter the user's last name");
             userModel.registerWithEmailAndPassword(`${firstName} ${lastName}`, email, password);
+            navigate('account');
           }
         }>
-          Register
+         {editMode ? "Save" : "Add User"}
         </button>
-        <button
-          type="button" className="btn btn-dark"
-          onClick={userModel.signInWithGoogle}
-        >
-          Register with Google
-        </button>
-        <div>
-          Existing user? <Link to="/">Login</Link> now.
-        </div>
       </div>
     </div>
   );
 }
-export default Register;
+export default AccountDetail;
