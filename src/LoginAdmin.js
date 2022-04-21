@@ -60,6 +60,9 @@ function LoginAdmin() {
           }}>
           Login
         </button>
+        <div>
+          <Link to="/reset">Forgot Password</Link>
+        </div>
       </div>
     }
     </div>

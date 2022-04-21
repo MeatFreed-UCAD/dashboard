@@ -87,7 +87,7 @@ function Details() {
               navigate("/admin");
             }}
           >
-            {editMode ? "Save" : "Add Restaurant"}
+            {editMode ? "Save" : "Add Business"}
           </button>
           </div>
   </div>

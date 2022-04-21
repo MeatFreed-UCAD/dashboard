@@ -30,7 +30,10 @@ const userModel = getUserModel();
         >
           Send password reset email
         </button>
-        <Link type="button" className="btn btn-dark" to="/loginRegister">Back</Link>
+        {/* <Link type="button" className="btn btn-dark" to="/loginRegister">Back</Link> */}
+        <button type="button" className="btn btn-dark" onClick={() => navigate(-1)}>
+          Back
+        </button>
       </div>
     </div>
   );

@@ -45,6 +45,22 @@ function Account() {
       <img src={logo} alt="Logo" className="logo"/>
       <ul className="nav-items">
         <li>
+          <button
+            className="btn menu-item-btn"
+            onClick={() => navigate("/admin")}
+          >
+            BUSINESSES
+          </button>
+        </li>
+        <li>
+          <button
+            className="btn menu-item-btn"
+            onClick={() => navigate("/account")}
+          >
+            USERS
+          </button>
+        </li>
+        <li>
           <button type="button" className="btn btn-light" onClick={dataModel.logout}>
             Logout
           </button>
@@ -54,17 +70,23 @@ function Account() {
 
     {userModel.isAdmin ?
     <div className="content">
-      <h1>Welcome Admin</h1>
+      <div className="admin-header">
+        <h2>Welcome Admin</h2>
+        <button type="button" className="btn btn-primary admin-add" onClick={() => navigate("/accountDetail")}>
+          Add User
+        </button>
+      </div>
+      {/* <h1>Welcome Admin</h1>
       <Link to={{pathname: "/admin"}}>
         <button type="button" className="btn btn-dark">
-          Manage restaurants
+          Manage Businesses
         </button>
       </Link>
       <Link to={{pathname: "/accountDetail"}}>
         <button type="button" className="btn btn-dark">
           Add user
         </button>
-      </Link>
+      </Link> */}
       
       <table>
         {/* <thead>

@@ -13,6 +13,9 @@ import DashboardCharts from "./DashboardCharts";
 import Admin from "./Admin";
 import Details from "./Details";
 import Overview from "./Overview";
+import PartnerDetails from "./PartnerDetails";
+import Campaigns from "./Campaigns";
+import IndividualCampaigns from "./IndividualCampaigns";
 
 function App() {
   document.title = 'MeatFreed Dashboard'
@@ -32,6 +35,9 @@ function App() {
           <Route exact path="/admin" element={<Admin/>} />
           <Route exact path="/details" element={<Details/>} />
           <Route exact path="/overview" element={<Overview/>} />
+          <Route exact path="/partnerDetails" element={<PartnerDetails/>} />
+          <Route exact path="/campaigns" element={<Campaigns/>} />
+          <Route exact path="/individualcampaigns" element={<IndividualCampaigns/>} />
         </Routes>
       </Router>
     </div>
