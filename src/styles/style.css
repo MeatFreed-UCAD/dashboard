@@ -66,18 +66,38 @@ body {
 .btn-primary {
   background-color: var(--meatfreed-green);
   border: none;
-  padding: 10px;
+  /* padding: 10px; */
   margin: 10px 0px;
 }
+
+.btn-secondary {
+  background-color: var(--meatfreed-blue);
+  border: none;
+}
+
 
 .btn-primary:hover {
   background-color: var(--meatfreed-green-dark);
 }
 
+.btn-primary:active {
+  background-color: var(--meatfreed-green-dark) !important;
+}
+
+.btn-outline-primary {
+  color: var(--meatfreed-green);
+  border-color: var(--meatfreed-green);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--meatfreed-green);
+  border-color: var(--meatfreed-green);
+}
+
 .btn-dark {
   background-color: var(--meatfreed-blue);
   border: none;
-  padding: 10px;
+  /* padding: 10px; */
   margin: 10px 0px;
 }
 
@@ -91,6 +111,12 @@ body {
   font-weight: 500;
   font-size: large;
   margin-bottom: 50px;
+}
+
+.inputContainer h6 {
+  font-weight: 500;
+  font-size: large;
+  margin-bottom: 20px;
 }
 
 .nav-items {
@@ -114,6 +140,11 @@ body {
   color: white;
 }
 
+.menu-item-btn:hover {
+  color: white;
+  font-weight: bold;
+}
+
 .chart-container {
   margin-bottom: 10px;
   padding: 50px;
@@ -127,6 +158,19 @@ h1 {
   font-weight: 700;
   font-size: 40px;
 
+}
+
+h2 {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 700;
+  font-size: 35px;
+  margin: 15px 0;
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 20px;
+  margin: 15px 0 0 0;
 }
 
 table {
@@ -191,3 +235,129 @@ td:last-child {
   font-size: 35px;
   font-weight: bold;
 }
+
+.business-info {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.info-label {
+  font-weight: bold;
+}
+
+.row-of-btn {
+  display: flex;
+  gap:25px;
+  align-items: center;
+}
+
+.overview-btn button {
+  width: 100px;
+  height: 40px;
+}
+
+.partner-header {
+  display: flex;
+  gap: 75%;
+  align-items: center;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 50%;
+}
+
+.campaign-content{
+  margin: 0 120px;
+}
+
+.campaign-table-header{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 210px;
+  justify-content: center;
+  width: 925px;
+}
+
+.campaign-table{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-width: 2px;
+  gap: 245px;
+  padding:25px;
+  justify-content: center;
+  
+}
+
+.campaign-button{
+  width:90px;
+  height:30px;
+}
+
+.campaign-offer-section{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 350px;
+  justify-content: center;
+}
+
+.campaign-offer-header-sample-section{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 200px;
+  justify-content: center;
+  width: 800px;
+  padding-left:25px;
+}
+
+.campaign-offer-sample-section{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-width: 2px;
+  gap: 275px;
+  padding:25px;
+  justify-content: center;
+}
+
+.campaign-sample-bottom-section{
+  display: flex;
+  flex-direction: row;
+  border-width: 2px;
+  padding:25px;
+  justify-content: space-around;
+  width: 550px;
+}
+
+.campaign-content-items{
+  margin-top: 75px;
+  margin-bottom: 75px;
+}
+
+.individual-campaign-back-button{
+  margin-left: 25px;
+  margin-bottom: 25px;
+  width:90px;
+  height:30px;
+}
+
+.individual-campaign-bottom-section{
+  margin-top: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.datePickerFormat {
+  height: 40px;
+  width: 10rem;
+  border-color: #0000001A;
+  box-shadow: 1px 1px 1px 1px '#0000001A';
+}
+
+

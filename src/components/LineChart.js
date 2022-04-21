@@ -8,8 +8,11 @@ function LineChart({ chartData }) {
       scales: {
         y:
         {
-          beginAtZero: true
-        }
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        },
       }
     }
     } />

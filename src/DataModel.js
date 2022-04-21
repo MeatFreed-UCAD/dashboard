@@ -9,14 +9,14 @@ import {
   sendPasswordResetEmail,
   signOut,
 } from "firebase/auth";
-import { 
+import {
   getFirestore, doc, getDoc, setDoc, addDoc, deleteDoc, updateDoc,
   collection, getDocs, query, where
 } from "firebase/firestore";
 import firebaseConfig from './Secrets';
 
 let app;
-if (getApps().length === 0){
+if (getApps().length === 0) {
   app = initializeApp(firebaseConfig);
 }
 const auth = getAuth(app);
@@ -28,7 +28,7 @@ class Model {
   constructor() {
     this.listeners = [];
   }
-  
+
   addListener(callbackFunction) {
     const listenerId = Date.now();
     const listener = {
@@ -41,7 +41,7 @@ class Model {
   }
 
   removeListener(listenerId) {
-    let idx = this.listeners.findIndex((elem)=>elem.id===listenerId);
+    let idx = this.listeners.findIndex((elem) => elem.id === listenerId);
     this.listeners.splice(idx, 1);
   }
 
@@ -51,13 +51,14 @@ class Model {
     }
   }
 }
-  
+
 class DataModel extends Model {
   constructor() {
     super();
     this.restaurants = [];
     this.offers = [];
     this.emails = [];
+    this.partners = [];
     this.name = "";
     this.numClicks = "";
     this.numOffers = "";
@@ -72,13 +73,13 @@ class DataModel extends Model {
 
   async fetchUserEmail(user) {
     const docSnap = await getDoc(doc(db, "users", user?.uid));
-    if (docSnap.exists()){
+    if (docSnap.exists()) {
       return docSnap.data().email;
     }
   }
 
   async fetchAssociatedEmails(placeId) {
-    const q = query(collection(db, "email2business"), where("place_id", "==", placeId));
+    const q = query(collection(db, "portalUsers"), where("place_id", "==", placeId));
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
       this.emails = [];
@@ -91,27 +92,39 @@ class DataModel extends Model {
     }
   }
 
-  async fetchPlaceId(user) {
+  // async fetchPlaceId(user) {
+  //   if (this.place_id) {
+  //     return this.place_id;
+  //   }
+  //   const email = await this.fetchUserEmail(user);
+  //   const q = query(collection(db, "email2business"), where("email", "==", email));
+  //   const querySnapshot = await getDocs(q);
+  //   if (!querySnapshot.empty){
+  //     this.place_id = querySnapshot.docs[0].data().place_id
+  //     return this.place_id;
+  //   }
+  // }
+
+  async fetchPlaceId(email) {
     if (this.place_id) {
       return this.place_id;
     }
-    const email = await this.fetchUserEmail(user);
-    const q = query(collection(db, "email2business"), where("email", "==", email));
+    const q = query(collection(db, "portalUsers"), where("email", "==", email));
     const querySnapshot = await getDocs(q);
-    if (!querySnapshot.empty){
+    if (!querySnapshot.empty) {
       this.place_id = querySnapshot.docs[0].data().place_id
       return this.place_id;
     }
   }
 
   async fetchOfferData(user, placeId=null) {
-    const place_id = placeId ? placeId : await this.fetchPlaceId(user);
+    const place_id = placeId ? placeId : await this.fetchPlaceId(user.email);
     if (place_id === undefined) {
       return;
     }
     const q = query(collection(db, "offers"), where("place_id", "==", place_id));
     const querySnapshot = await getDocs(q);
-    if (!querySnapshot.empty){
+    if (!querySnapshot.empty) {
       this.offers = [];
       querySnapshot.forEach((doc) => {
         let offer = doc.data();
@@ -123,11 +136,11 @@ class DataModel extends Model {
       this.notifyListener();
     }
   }
-  
+
   async fetchRestaurantInfo(user) {
-    const place_id = await this.fetchPlaceId(user);
+    const place_id = await this.fetchPlaceId(user.email);
     if (place_id === undefined) {
-      this.name = "unauthorized email"; 
+      this.name = "unauthorized email";
       this.notifyListener();
       return;
     }
@@ -143,7 +156,7 @@ class DataModel extends Model {
   }
 
   async fetchRestaurantClicks(user) {
-    const place_id = await this.fetchPlaceId(user);
+    const place_id = await this.fetchPlaceId(user.email);
     if (place_id === undefined) {
       return;
     }
@@ -154,6 +167,7 @@ class DataModel extends Model {
       console.log("rest doc id = " + docID);
       const docsSnap = await getDocs(collection(db, "restaurants/" + docID + "/clicks"));
       //creating an array from the restaurant clicks docsSnap
+      this.restaurantClickData = [];
       docsSnap.forEach((doc) => {
         let restaurantClick = doc.data();
         restaurantClick.key = doc.id;
@@ -166,12 +180,14 @@ class DataModel extends Model {
         //data pushed to restaurantClickData array
         this.restaurantClickData.push(restaurantClick);
       })
+      this.notifyListener();
+
     }
   }
 
 
   async fetchOfferClicks(user) {
-    const place_id = await this.fetchPlaceId(user);
+    const place_id = await this.fetchPlaceId(user.email);
     console.log(place_id)
     if (place_id === undefined) {
       return;
@@ -183,6 +199,7 @@ class DataModel extends Model {
       console.log("offer doc id = " + docID);
       const docsSnap = await getDocs(collection(db, "offers/" + docID + "/clicks"));
       //creating an array from the restaurant clicks docsSnap
+      this.offerClickData = [];
       docsSnap.forEach((doc) => {
         let offerClick = doc.data();
         console.log(offerClick);
@@ -197,6 +214,8 @@ class DataModel extends Model {
         //data pushed to restaurantClickData array
         this.offerClickData.push(offerClick);
       })
+      this.notifyListener();
+
     }
   }
 
@@ -210,34 +229,67 @@ class DataModel extends Model {
   deleteItem = async (key) => {
     const docRef = doc(db, "restaurants", key);
     await deleteDoc(docRef);
-    let idx = this.restaurants.findIndex((elem)=>elem.key===key);
+    let idx = this.restaurants.findIndex((elem) => elem.key === key);
     this.restaurants.splice(idx, 1);
     this.notifyListener();
   }
 
-    
   updateItem = async (key, newItem) => {
     const docRef = doc(db, "restaurants", key);
     await updateDoc(docRef, newItem);
-    let idx = this.restaurants.findIndex((elem)=>elem.key===key);
+    let idx = this.restaurants.findIndex((elem) => elem.key === key);
     this.restaurants[idx] = newItem;
     this.notifyListener();
   }
 
-  addEmail = async (item) => {
-    let docRef = await addDoc(collection(db, "email2business"), item);
+  addPartner = async (item) => {
+    let docRef = await addDoc(collection(db, "portalUsers"), item);
     item.key = docRef.id;
-    this.emails.push(item);
+    this.partners.push(item);
     this.notifyListener();
   }
 
-  deleteEmail = async (key) => {
-    const docRef = doc(db, "email2business", key);
+  updatePartner = async (key, newItem) => {
+    const docRef = doc(db, "portalUsers", key);
+    await updateDoc(docRef, newItem);
+  }
+
+  deletePartner = async (key) => {
+    const docRef = doc(db, "portalUsers", key);
     await deleteDoc(docRef);
-    let idx = this.emails.findIndex((elem)=>elem.key===key);
-    this.emails.splice(idx, 1);
+    let idx = this.partners.findIndex((elem) => elem.key === key);
+    this.partners.splice(idx, 1);
     this.notifyListener();
   }
+
+  async fetchPartners(placeId) {
+    const q = query(collection(db, "portalUsers"), where("place_id", "==", placeId), where("role", "==", "business_partner"));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      this.partners = [];
+      querySnapshot.forEach((doc) => {
+        let partner = doc.data();
+        partner.key = doc.id;
+        this.partners.push(partner);
+      });
+      this.notifyListener();
+    }
+  }
+
+  // addEmail = async (item) => {
+  //   let docRef = await addDoc(collection(db, "email2business"), item);
+  //   item.key = docRef.id;
+  //   this.emails.push(item);
+  //   this.notifyListener();
+  // }
+
+  // deleteEmail = async (key) => {
+  //   const docRef = doc(db, "email2business", key);
+  //   await deleteDoc(docRef);
+  //   let idx = this.emails.findIndex((elem)=>elem.key===key);
+  //   this.emails.splice(idx, 1);
+  //   this.notifyListener();
+  // }
 
   getRestaurantName() {
     return this.name;
@@ -287,17 +339,28 @@ class UserModel extends Model {
 
   async fetchUserName(user) {
     const docSnap = await getDoc(doc(db, "users", user?.uid));
-    if (docSnap.exists()){ 
+    if (docSnap.exists()) {
       this.userName = docSnap.data().name;
       this.notifyListener();
     }
   }
 
+  // async fetchAdmin(user) {
+  //   const docSnap = await getDoc(doc(db, "users", user?.uid));
+  //   if (docSnap.exists()){ 
+  //     this.isAdmin = docSnap.data().admin;
+  //     this.notifyListener();
+  //   }
+  // }
+
   async fetchAdmin(user) {
-    const docSnap = await getDoc(doc(db, "users", user?.uid));
-    if (docSnap.exists()){ 
-      this.isAdmin = docSnap.data().admin;
-      this.notifyListener();
+    const q = query(collection(db, "portalUsers"), where("email", "==", user.email));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty){
+      if (querySnapshot.docs[0].data().role === 'admin'){
+        this.isAdmin = true;
+        this.notifyListener();
+      }
     }
   }
 
@@ -379,7 +442,7 @@ class AdminModel extends Model {
   updateItem = async (key, newItem) => {
     const docRef = doc(db, "users", key);
     await updateDoc(docRef, newItem);
-    let idx = this.users.findIndex((elem)=>elem.key===key);
+    let idx = this.users.findIndex((elem) => elem.key === key);
     this.users[idx] = newItem;
     this.notifyListener();
   }
@@ -387,7 +450,7 @@ class AdminModel extends Model {
   deleteItem = async (key) => {
     const docRef = doc(db, "user", key);
     await deleteDoc(docRef);
-    let idx = this.users.findIndex((elem)=>elem.key===key);
+    let idx = this.users.findIndex((elem) => elem.key === key);
     this.users.splice(idx, 1);
     this.notifyListener();
   }

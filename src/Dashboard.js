@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, getUserModel } from "./DataModel";
 import './styles/style.css';
 import Offer from './Offer';
+import Campaigns from './Campaigns';
 import { getDataModel } from './DataModel';
 import logo from './meatfreed-logo.png';
 
@@ -21,6 +22,7 @@ function Dashboard() {
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
+    console.log(user.email);
     dataModel.fetchRestaurantInfo(user);
     dataModel.fetchOfferData(user);
     dataModel.fetchRestaurantClicks(user);
@@ -61,7 +63,14 @@ function Dashboard() {
               OFFERS
             </button>
           </li>
-          {/* <li>CAMPAIGNS</li> */}
+          <li>
+            <button
+              className="btn menu-item-btn"
+              onClick={() => navigate("/campaigns")}
+            >
+              CAMPAIGNS
+            </button>
+          </li>
           <li>
             <button type="button" className="btn btn-light" onClick={dataModel.logout}>
               Logout
@@ -103,6 +112,8 @@ function Dashboard() {
             {offers.map((offer, i) => <Offer key={i} description={offer.description} expDate={offer.when} numClicks={offer.clicksCount} />)}
           </tbody>
         </table>
+
+        
       </div>
 
     </>
